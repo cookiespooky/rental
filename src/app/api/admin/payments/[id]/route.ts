@@ -3,8 +3,6 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-type Params = { params: { id: string } };
-
 type UpdatePayload = {
   status?: string;
   paymentUrl?: string | null;
@@ -12,7 +10,10 @@ type UpdatePayload = {
   amount?: number;
 };
 
-export async function PATCH(req: Request, { params }: Params) {
+export async function PATCH(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   const body = (await req.json()) as UpdatePayload;
   const data: Record<string, unknown> = {};
 

@@ -3,9 +3,10 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
-type Params = { params: { id: string } };
-
-export async function PUT(req: Request, { params }: Params) {
+export async function PUT(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   const body = await req.json();
   const { title, slug, price, priceType, active } = body || {};
 
@@ -23,7 +24,10 @@ export async function PUT(req: Request, { params }: Params) {
   return NextResponse.json({ extra });
 }
 
-export async function DELETE(_req: Request, { params }: Params) {
+export async function DELETE(
+  _req: Request,
+  { params }: { params: { id: string } }
+) {
   await prisma.extra.delete({ where: { id: params.id } });
   return NextResponse.json({ ok: true });
 }
