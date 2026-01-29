@@ -13,6 +13,16 @@ type TbankWebhook = {
 
 export async function POST(req: Request) {
   const payload = (await req.json()) as TbankWebhook & Record<string, unknown>;
+  const tokenPayload = Object.fromEntries(
+    Object.entries(payload).filter(([, value]) => {
+      return (
+        value === null ||
+        value === undefined ||
+        typeof value === "string" ||
+        typeof value === "number"
+      );
+    })
+  ) as Record<string, string | number | null | undefined>;
 
   const password = process.env.TBANK_PASSWORD;
   if (!password) {
@@ -24,7 +34,7 @@ export async function POST(req: Request) {
     return new Response("Token required", { status: 400 });
   }
 
-  const expectedToken = buildTbankToken(payload, password);
+  const expectedToken = buildTbankToken(tokenPayload, password);
   if (receivedToken !== expectedToken) {
     return new Response("Invalid token", { status: 400 });
   }

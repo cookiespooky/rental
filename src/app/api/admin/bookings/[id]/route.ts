@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -9,9 +9,10 @@ type UpdatePayload = {
 };
 
 export async function PATCH(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const body = (await req.json()) as UpdatePayload;
   const data: Record<string, unknown> = {};
 
@@ -21,7 +22,7 @@ export async function PATCH(
   }
 
   const booking = await prisma.booking.update({
-    where: { id: params.id },
+    where: { id },
     data,
   });
 

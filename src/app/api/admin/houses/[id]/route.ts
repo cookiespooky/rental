@@ -1,12 +1,13 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
 export async function PUT(
-  req: Request,
-  { params }: { params: { id: string } }
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params;
   const body = await req.json();
   const {
     title,
@@ -19,7 +20,7 @@ export async function PUT(
   } = body || {};
 
   const house = await prisma.house.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       title,
       slug,
@@ -35,9 +36,10 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _req: Request,
-  { params }: { params: { id: string } }
+  _req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
-  await prisma.house.delete({ where: { id: params.id } });
+  const { id } = await params;
+  await prisma.house.delete({ where: { id } });
   return NextResponse.json({ ok: true });
 }
