@@ -1,43 +1,54 @@
-<article class="page">
-  <p class="eyebrow">Объект</p>
-  <h1>{{ .Page.Title }}</h1>
-  {{- if .Page.Description }}
-  <p class="deck">{{ .Page.Description }}</p>
-  {{- end }}
-  <div class="meta-row">
-    {{- $hubs := index .FM "hub" }}
-    {{- if $hubs }}
-    <div class="tags">
-      {{- range $hubs }}
-      <a class="tag" href="{{ $.BaseURL }}/{{ . }}">#{{ . }}</a>
+<div class="house-page">
+  <div class="houseGrid">
+    <div class="leftColumn">
+      <h1 class="title">{{ .Page.Title }}</h1>
+      <div class="flex gap-3 items-center">
+        {{- if .FM.guests }}<p class="subtitle badge">до {{ .FM.guests }} гостей</p>{{- end }}
+        {{- if .FM.price }}<p class="subtitle badge">{{ .FM.price }}</p>{{- end }}
+      </div>
+      {{- if .Page.Description }}
+      <p class="description">{{ .Page.Description }}</p>
       {{- end }}
+
+      <div class="gallery" data-gallery>
+        <div class="hero">
+          <img src="{{ if .FM.image }}{{ .BaseURL }}/{{ .FM.image }}{{ else }}{{ .AssetsBase }}/placeholder.svg{{ end }}" alt="{{ .Page.Title }}" class="heroImage" data-gallery-hero>
+        </div>
+      </div>
+
+      <div class="house-content">{{ .Body }}</div>
     </div>
-    {{- end }}
-  </div>
-  <div class="prose">
-    {{ .Body }}
+
+    <aside class="glass-panel priceCard space-y-3 house-aside">
+      {{- if .FM.price }}
+      <div>
+        <div class="priceLabel">Стоимость за сутки</div>
+        <div class="priceValue">{{ .FM.price }}</div>
+      </div>
+      {{- end }}
+      {{- if .FM.guests }}
+      <div class="small-note">Вместимость до {{ .FM.guests }} гостей.</div>
+      {{- end }}
+      <button type="button" class="button-primary" data-modal-open="contact">Оставить заявку</button>
+    </aside>
   </div>
 
-  <div class="section">
   {{- if .Collections.related_items.Items }}
-    <h2>Похожие объекты</h2>
-    <div class="grid blog-grid">
+  <section class="section-block space-y-4">
+    <h2 class="text-3xl font-semibold font-display">Похожие объекты</h2>
+    <div class="card-grid card-grid-3">
       {{- range .Collections.related_items.Items }}
-      <article class="card blog-card">
-        <a class="blog-link" href="{{ $.BaseURL }}{{ .Path }}">
-          {{- if .FM.image }}
-          <img class="blog-image" src="{{ .FM.image }}" alt="{{ .Title }}">
-          {{- else }}
-          <img class="blog-image" src="{{ $.AssetsBase }}/placeholder.svg" alt="">
-          {{- end }}
-          <div class="blog-body">
-            <h3>{{ .Title }}</h3>
-            {{- if .Description }}<p class="muted">{{ .Description }}</p>{{- end }}
+      <a href="{{ $.BaseURL }}{{ .Path }}" class="link">
+        <div class="glass-panel card cardHover">
+          <div class="image" style="background-image: url('{{ if .FM.image }}{{ $.BaseURL }}/{{ .FM.image }}{{ else }}{{ $.AssetsBase }}/placeholder.svg{{ end }}')"></div>
+          <div class="content">
+            <h3 class="text-xl font-semibold font-display">{{ .Title }}</h3>
+            {{- if .Description }}<p class="description">{{ .Description }}</p>{{- end }}
           </div>
-        </a>
-      </article>
+        </div>
+      </a>
       {{- end }}
     </div>
+  </section>
   {{- end }}
-  </div>
-</article>
+</div>

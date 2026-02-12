@@ -6,7 +6,7 @@ description: "Баня с ароматом хвои и спокойной атм
 hub:
   - banyas
 favorite: true
-image: /media/uploads/banya2/1.webp
+image: media/uploads/banya2/1.webp
 order: 20
 guests: 6
 price: "2000 ₽"

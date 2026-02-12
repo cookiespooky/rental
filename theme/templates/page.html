@@ -1,10 +1,9 @@
-<article class="page">
-  <p class="eyebrow">Страница</p>
-  <h1>{{ .Page.Title }}</h1>
-  {{- if .Page.Description }}
-  <p class="deck">{{ .Page.Description }}</p>
-  {{- end }}
-  <div class="prose">
-    {{ .Body }}
-  </div>
-</article>
+<div class="container-shell">
+  <section class="section-block">
+    <h1 class="text-3xl font-semibold font-display">{{ .Page.Title }}</h1>
+    {{- if .Page.Description }}
+    <p class="description">{{ .Page.Description }}</p>
+    {{- end }}
+    <div class="house-content">{{ .Body }}</div>
+  </section>
+</div>

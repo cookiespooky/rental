@@ -1,11 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
-  {{- $isHome := eq .Page.Type "home" -}}
   {{- $pageURL := .Canonical -}}
   {{- if not $pageURL }}{{- $pageURL = printf "%s/" .BaseURL -}}{{- end -}}
-  {{- $siteName := "Demo Blog" -}}
-  {{- $ogImage := printf "%s/assets/notepub.svg" .BaseURL -}}
+  {{- $ogImage := printf "%s/media/default.webp" .BaseURL -}}
   {{- $hasOGImage := false -}}
   {{- range .Meta.OpenGraph -}}
     {{- if eq .Key "og:image" -}}
@@ -13,12 +11,10 @@
       {{- $hasOGImage = true -}}
     {{- end -}}
   {{- end -}}
+  <base href="/">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="color-scheme" content="light" />
-  <meta name="theme-color" content="#ffffff" />
-  <link rel="icon" type="image/svg+xml" href="{{ .AssetsBase }}/notepub.svg" />
-  <link rel="stylesheet" href="{{ .AssetsBase }}/styles.css" />
+  <title>{{ .Title }}</title>
   {{- if .Page.Description }}
   <meta name="description" content="{{ .Page.Description }}" />
   {{- end }}
@@ -28,116 +24,65 @@
   {{- if .Canonical }}
   <link rel="canonical" href="{{ .Canonical }}" />
   {{- end }}
+  <meta property="og:title" content="{{ .Title }}" />
+  {{- if .Page.Description }}
+  <meta property="og:description" content="{{ .Page.Description }}" />
+  {{- end }}
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ $pageURL }}" />
+  {{- if not $hasOGImage }}
+  <meta property="og:image" content="{{ $ogImage }}" />
+  {{- end }}
+  {{- range .Meta.OpenGraph }}
+  <meta property="{{ .Key }}" content="{{ .Value }}" />
+  {{- end }}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ .Title }}" />
   {{- if .Page.Description }}
   <meta name="twitter:description" content="{{ .Page.Description }}" />
   {{- end }}
   <meta name="twitter:image" content="{{ $ogImage }}" />
-  {{- range .Meta.OpenGraph }}
-  <meta property="{{ .Key }}" content="{{ .Value }}" />
-  {{- end }}
-  <meta property="og:site_name" content="{{ $siteName }}" />
-  {{- if not $hasOGImage }}
-  <meta property="og:image" content="{{ $ogImage }}" />
-  {{- end }}
-  {{- if .Meta.JSONLD }}
-  <script type="application/ld+json">{{ .Meta.JSONLD }}</script>
-  {{- else }}
-  {{- $isArticle := eq .Page.Type "article" -}}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "{{ .BaseURL }}/#website",
-        "url": "{{ .BaseURL }}/",
-        "name": "{{ $siteName }}",
-        "inLanguage": "en"
-      },
-      {
-        "@type": "WebPage",
-        "@id": "{{ $pageURL }}#webpage",
-        "url": "{{ $pageURL }}",
-        "name": "{{ .Title }}",
-        "description": "{{ .Page.Description }}",
-        "isPartOf": { "@id": "{{ .BaseURL }}/#website" },
-        "inLanguage": "en"
-      }
-      {{- if $isArticle -}},
-      {
-        "@type": "BlogPosting",
-        "headline": "{{ .Title }}",
-        "description": "{{ .Page.Description }}",
-        "mainEntityOfPage": { "@id": "{{ $pageURL }}#webpage" },
-        "inLanguage": "en"
-      }
-      {{- end -}}
-    ]
-  }
-  </script>
-  {{- end }}
-  {{- if not $isHome }}
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": "Home",
-        "item": "{{ .BaseURL }}/"
-      },
-      {
-        "@type": "ListItem",
-        "position": 2,
-        "name": "{{ .Title }}",
-        "item": "{{ $pageURL }}"
-      }
-    ]
-  }
-  </script>
-  {{- end }}
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <link rel="icon" type="image/svg+xml" href="{{ .AssetsBase }}/notepub.svg" />
+  <link rel="stylesheet" href="{{ .AssetsBase }}/styles.css" />
   <script>
     window.__notepubSearchMode = "{{ .SearchMode }}";
     window.__notepubBaseURL = "{{ .BaseURL }}";
   </script>
-  <title>{{ .Title }}</title>
 </head>
-<body>
+<body data-lead-endpoint="https://functions.yandexcloud.net/d4e951j5mp0de508vbrk" data-lead-success="Спасибо! Мы свяжемся с вами в ближайшее время.">
   {{ template "header.html" . }}
-
-  <aside class="mobile-nav" data-nav-panel aria-hidden="true">
-    <div class="mobile-nav-inner">
-      <nav class="mobile-nav-links">
-        <a href="{{ .BaseURL }}/">Главная</a>
-        <a href="{{ .BaseURL }}/houses">Дома</a>
-        <a href="{{ .BaseURL }}/banyas">Бани</a>
-        <a href="{{ .BaseURL }}/search">Поиск</a>
-      </nav>
-      <div class="mobile-nav-footer"></div>
-    </div>
-    <div class="mobile-nav-backdrop" data-nav-close></div>
-  </aside>
-  <main class="container">
-    {{ .Body }}
-  </main>
+  {{ .Body }}
   {{ template "footer.html" . }}
 
-  <div class="search-modal" data-search-modal aria-hidden="true">
-    <div class="search-backdrop" data-search-close></div>
-    <div class="search-panel" role="dialog" aria-modal="true" aria-label="Search">
-      <form class="search-form" action="{{ .BaseURL }}/search" method="get">
-        <input type="search" name="q" placeholder="Поиск..." minlength="2" data-search-input />
-        <button type="submit">Найти</button>
-        <button type="button" class="ghost" data-search-close>Закрыть</button>
+  <div class="modal-overlay is-hidden" data-modal="contact" role="dialog" aria-modal="true" aria-label="Заявка">
+    <div class="modal" role="document">
+      <div class="modalHeader">
+        <div>
+          <p class="modalTitle">Заявка на звонок</p>
+          <a href="tel:+79224474477" class="modalPhone">+7 (922) 447 44 77</a>
+        </div>
+        <button type="button" class="closeButton" data-modal-close aria-label="Закрыть">×</button>
+      </div>
+      <form class="form" data-lead-form>
+        <label class="field">
+          <span>Имя</span>
+          <input type="text" name="name" placeholder="Ваше имя" class="input" required>
+        </label>
+        <label class="field">
+          <span>Телефон</span>
+          <input type="tel" name="phone" placeholder="+7 (___) ___-__-__" class="input" inputmode="tel" autocomplete="tel" required>
+        </label>
+        <button type="submit" class="submitButton">Отправить</button>
+        <div class="small-note" data-lead-status>Введите имя и телефон.</div>
       </form>
-      <div class="search-results" data-search-results></div>
     </div>
   </div>
-  <script src="{{ .AssetsBase }}/main.js"></script>
-  <script src="{{ .AssetsBase }}/lead.js"></script>
+
+  <script src="{{ .AssetsBase }}/main.js" defer></script>
 </body>
 </html>

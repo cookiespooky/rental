@@ -6,7 +6,7 @@ description: "Баня для расслабления и мягкого про�
 hub:
   - banyas
 favorite: true
-image: /media/uploads/banya1/1.webp
+image: media/uploads/banya1/1.webp
 order: 10
 guests: 6
 price: "2000 ₽"

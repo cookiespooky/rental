@@ -6,7 +6,7 @@ description: "VIP‑усадьба для частного отдыха и ме�
 hub:
   - houses
 favorite: true
-image: /media/uploads/house1/1.webp
+image: media/uploads/house1/1.webp
 order: 10
 guests: 40
 price: "35000 ₽"

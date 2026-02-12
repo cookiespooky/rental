@@ -1,5 +1,23 @@
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <span class="footer-built muted">Built with Notepub</span>
+<footer class="footer">
+  <div class="inner">
+    <a href="{{ .BaseURL }}/" class="left" aria-label="На главную">
+      <div class="logo">
+        <img src="{{ .BaseURL }}/media/logo.webp" alt="Логотип" class="logoImage">
+      </div>
+      <div class="brandBlock">
+        <span class="brand">Барская усадьба</span>
+      </div>
+    </a>
+    <div class="middle">
+      <span class="phone">+7 (922) 447 44 77</span>
+      <button type="button" class="ctaButton" data-modal-open="contact">Оставить заявку</button>
+      <a href="tel:+79224474477" class="phoneInline">+7 (922) 447 44 77</a>
+    </div>
+    <div class="right">
+      <div class="links">
+        <button type="button" class="docButton" aria-disabled="true">Политика конфиденциальности</button>
+        <button type="button" class="docButton" aria-disabled="true">Публичная оферта</button>
+      </div>
+    </div>
   </div>
 </footer>

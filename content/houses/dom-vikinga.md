@@ -6,7 +6,7 @@ description: "Атмосферный дом для отдыха и камерн�
 hub:
   - houses
 favorite: true
-image: /media/uploads/house3/1.webp
+image: media/uploads/house3/1.webp
 order: 30
 guests: 20
 price: "20000 ₽"

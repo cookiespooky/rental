@@ -6,7 +6,7 @@ description: "Уютный дом для семейных выходных и н
 hub:
   - houses
 favorite: true
-image: /media/uploads/house2/1.webp
+image: media/uploads/house2/1.webp
 order: 20
 guests: 25
 price: "25000 ₽"
